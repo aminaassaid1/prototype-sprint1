@@ -53,25 +53,25 @@ class PersonneBLO {
         return $affectedRows;
     }
 
-    public function DeletePersonne($personneId)
-    {
-        $affectedRows = 0;
+   public function DeletePersonne($personneId)
+   {
+       $affectedRows = 0;
 
-        if ($personneId > 0) {
-            if ($this->IsIdExists($personneId))
-            {
-                $affectedRows = (int)$this->personneDao->DeletePersonne($personneId);
-            } else
-            {
-                $this->errorMessage = 'Record not found.';
-            }
-        } else
-        {
-            $this->errorMessage = 'Invalid Id.';
-        }
+       if ($personneId > 0) {
+           if ($this->IsIdExists($personneId))
+           {
+               $affectedRows = (int)$this->personneDao->DeletePersonne($personneId);
+           } else
+           {
+               $this->errorMessage = 'Record not found.';
+           }
+       } else
+       {
+           $this->errorMessage = 'Invalid Id.';
+       }
 
-        return $affectedRows;
-    }
+       return $affectedRows;
+   }
 
     public function IsValidPersonne($personne)
     {

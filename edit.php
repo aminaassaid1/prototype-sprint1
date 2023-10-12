@@ -1,12 +1,11 @@
 <?php
-global $conn, $personneDAO;
 require_once('loader.php');
 
-$personneDAO = new PersonneDAO($conn);
 
-global $conn, $personneDAO;
-require_once('loader.php');
 if (isset($_GET['id'])) {
+    global $conn, $personneDAO;
+
+    $personneDAO = new PersonneDAO($conn);
     $id = $_GET['id'];
 
     $sql = "SELECT * FROM personne WHERE id = :id";
@@ -25,16 +24,19 @@ if (isset($_GET['id'])) {
     exit();
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
+if (isset($_POST['updateS'])) {
+    $personneDAO = new PersonneDAO($conn);
+    $id_persone = $_POST['edit-id'];
     $nom = $_POST['edit-nom'];
     $cne = $_POST['edit-CNE'];
-    $nom_ville= $_POST['edit-ville'];
+    $nom_ville= $_POST['stagiaireVille'];
 
     try {
-        $ville = $personneDAO->getVilleIdByName($nom_ville);
-        $personneDAO->updateStagiaire($id, $nom, $cne, $ville);
-        header("Location: index.php");
-        exit();
+        $result = $personneDAO->updateStagiaires($id_persone, $nom, $cne, $nom_ville);
+
+        if($result){
+            header('location:index.php');
+        }
     } catch (Exception $e) {
         $errorMessage = $e->getMessage();
     }
@@ -55,14 +57,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
-    <title>Edit Student</title>
+    <title>Edit Stagiaire</title>
 </head>
 
 <body>
 <!-- Navigation Bar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-        <a class="navbar-brand" href="./">Student Information</a>
+        <a class="navbar-brand" href="./">Stagiaire Information</a>
     </div>
 </nav>
 
@@ -73,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
 
 <!-- Edit Form -->
 <section class="container mt-4">
-    <form method="POST" action="<?php echo $_SERVER['PHP_SELF'] . '?id=' . $id; ?>">
+    <form method="POST" action="">
         <input type="hidden" name="edit-id" value="<?php echo $id; ?>">
 
         <div class="mb-3">
@@ -90,11 +92,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
 
         <div class="mb-3">
             <label for="edit-ville" class="form-label">Ville:</label>
-            <input type="text" class="form-control" name="edit-ville" id="edit-ville"
-                   value="<?php echo isset($student['ville']) ? $student['ville'] : ''; ?>" required>
+            <select name="stagiaireVille" id="stagiaireVille">
+                <?php 
+                $villeData = new PersonneDAO($conn);
+                $villeList = $villeData->getVilleIdByName();
+                // var_dump($villeList);
+                foreach($villeList as $ville){?>
+                  <option value="<?php echo $ville['id'] ?>"><?php echo $ville['nom_ville'] ?></option>
+                  <?php
+                }
+                ?>
+            </select>
         </div>
 
-        <button type="submit" class="btn btn-primary" name="update">Update</button>
+        <button type="submit" class="btn btn-primary" name="updateS">Update</button>
     </form>
 </section>
 

@@ -2,7 +2,7 @@
 global $conn;
 include 'Application/DatabaseConnection.php';
 include 'Application/Entities/Ville.php';
-include 'Application/Entities/Student.php';
+include 'Application/Entities/Stagiaire.php';
 
 class PersonneDAO {
     private $conn;
@@ -34,33 +34,28 @@ class PersonneDAO {
         }
     }
 
-    // GestionStagiaire3.php
-    public function getVilleIdByName($nom_ville) {
-        try {
-            $sql = "SELECT id FROM ville WHERE nom_ville = :nom_ville";
-            $stmt = $this->conn->prepare($sql);
-            $stmt->bindParam(':nom_ville', $nom_ville);
-            $stmt->execute();
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($result) {
-                return $result['id'];
-            } else {
-                throw new Exception("City not found: $nom_ville");
-            }
+    public function getVilleIdByName() {
+        try {
+            $sql = "SELECT * FROM ville";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+           
+                return $result;
+           
         } catch (PDOException $e) {
             $this->logError("Error getting city id: " . $e->getMessage());
             throw new Exception("An error occurred while getting city id.");
         }
     }
 
-
-
     public function getStagiaireById($id) {
         try {
             $sql = "SELECT personne.id, personne.nom, personne.prenom, personne.CNE, ville.nom_ville
                     FROM personne
-                    JOIN ville ON personne.id_ville = ville.id
+                    INNER JOIN ville ON personne.id_ville = ville.id
                     WHERE personne.id = :id";
             $stmt = $this->conn->prepare($sql);
             $stmt->bindParam(':id', $id);
@@ -72,10 +67,10 @@ class PersonneDAO {
         }
     }
 
-    public function updateStagiaire($id, $nom, $cne, $ville) {
+    public function updateStagiaires($id, $nom, $cne, $ville) {
         try {
             $sql = "UPDATE personne 
-                SET nom = :nom, CNE = :cne, id_ville = (SELECT id FROM ville WHERE nom_ville = :ville) 
+                SET nom = :nom, CNE = :cne, id_ville = :ville
                 WHERE id = :id";
 
             $stmt = $this->conn->prepare($sql);
@@ -86,34 +81,38 @@ class PersonneDAO {
             $stmt->bindParam(':ville', $ville);
 
             $stmt->execute();
+            return true;
         } catch (PDOException $e) {
             $this->logError("Error updating Stagiaire: " . $e->getMessage());
         }
     }
 
-    public function deleteStagiaire($id) {
-        try {
-            $sql = "DELETE FROM personne WHERE id = :id";
-            $stmt = $this->conn->prepare($sql);
-            $stmt->bindParam(':id', $id);
-            $stmt->execute();
+   public function deleteStagiaire($id) {
+       try {
+           $sql = "DELETE FROM personne WHERE id = :id";
+           $stmt = $this->conn->prepare($sql);
+           $stmt->bindParam(':id', $id);
+           $stmt->execute();
 
-            // Add a debugging statement
-            echo "Stagiaire with ID $id deleted successfully.";
+           // Add a debugging statement
+           echo "Stagiaire with ID $id deleted successfully.";
 
-            return true;
-        } catch (PDOException $e) {
-            $this->logError("Error deleting Stagiaire with ID $id: " . $e->getMessage());
-            return false;
-        }
-    }
+           return true;
+       } catch (PDOException $e) {
+           $this->logError("Error deleting Stagiaire with ID $id: " . $e->getMessage());
+           return false;
+       }
+   }
 
 
 
     public function GetAllPersonnes()
     {
         try {
-            $sql = "SELECT id, nom, prenom, CNE, id_ville FROM personne";
+            $sql = "SELECT prototype.personne.id, prototype.personne.nom, prototype.personne.prenom, prototype.personne.CNE, prototype.ville.nom_ville
+            FROM prototype.personne
+            INNER JOIN prototype.ville ON prototype.personne.id_ville = prototype.ville.id";
+            ;
             $stmt = $this->conn->prepare($sql);
             $stmt->execute();
 
@@ -131,5 +130,4 @@ class PersonneDAO {
     }
 }
 
-$personneDAO = new PersonneDAO($conn);
 ?>

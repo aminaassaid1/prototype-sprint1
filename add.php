@@ -7,11 +7,10 @@ $personneDAO = new PersonneDAO($conn);
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add'])) {
     $nom = $_POST['nom'];
     $cne = $_POST['cne'];
-    $ville = $_POST['ville'];
+    $ville = $_POST['stagiaireVille'];
 
     try {
-        $id_ville = $personneDAO->getVilleIdByName($ville);
-        $personneDAO->createStagiaire($nom, "samadi", $cne, $id_ville);
+        $personneDAO->createStagiaire($nom, "samadi", $cne, $ville);
         header("Location: index.php");
         exit();
     } catch (Exception $e) {
@@ -45,7 +44,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add'])) {
         </div>
         <div class="mb-3">
             <label for="ville" class="form-label">Ville</label>
-            <input type="text" class="form-control" id="ville" name="ville" required>
+            <select name="stagiaireVille" id="stagiaireVille">
+                <?php 
+                $villeData = new PersonneDAO($conn);
+                $villeList = $villeData->getVilleIdByName();
+                // var_dump($villeList);
+                foreach($villeList as $ville){?>
+                  <option value="<?php echo $ville['id'] ?>"><?php echo $ville['nom_ville'] ?></option>
+                  <?php
+                }
+                ?>
+            </select>
         </div>
         <button type="submit" name="add" class="btn btn-primary">Add Stagiaire</button>
     </form>
