@@ -35,14 +35,14 @@ if (isset($_POST["delete"])) {
     <!-- Bootstrap 5.3.2 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
-    <title>List of Students</title>
+    <title>List of Stagiaire</title>
 </head>
 
 <body>
 <!-- Navigation Bar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-        <a class="navbar-brand" href="./">Student Information</a>
+        <a class="navbar-brand" href="./">Stagiaire Information</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -58,7 +58,7 @@ if (isset($_POST["delete"])) {
 
 <!-- Page Header -->
 <header class="page-header">
-    <h1>List of Students</h1>
+    <h1>List of Stagiaire</h1>
 </header>
 
 <!-- Student Table -->
@@ -121,36 +121,8 @@ if (isset($_POST["delete"])) {
                         <input type="hidden" id="delete-id" name="delete-id">
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-danger" name="delete" id="deleteBtn">Delete</button>
+                            <button type="submit" class="btn btn-danger" name="delete" id="deleteBtn">Delete</button>
                         </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Edit -->
-    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="editModal">Edit Stagiaire</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-                        <input type="hidden" id="edit-id" name="edit-id">
-                        <label for="edit-nom">Nom:</label>
-                        <input type="text" name="edit-nom" id="edit-nom" required>
-                        <br>
-                        <label for="edit-CNE">CNE:</label>
-                        <input type="text" name="edit-CNE" id="edit-CNE" required>
-                        <label for="edit-ville">Ville:</label>
-                        <input type="text" name="edit-ville" id="edit-ville" required>
-                        <br>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" name="update">Update</button>
                     </form>
                 </div>
             </div>
@@ -182,14 +154,10 @@ if (isset($_POST["delete"])) {
 
 </script>
 <script>
-    $("#deleteBtn").click(function () {
-        console.log("Delete button clicked");
-        $("#deleteForm").submit();
-    });
-
     $(document).ready(function () {
-        $("#deleteForm").submit(function (event) {
-            console.log("Form submitted");
+        $(".deleteInTable").click(function () {
+            var id = $(this).data("id");
+            $("#delete-id").val(id);
         });
     });
 </script>
