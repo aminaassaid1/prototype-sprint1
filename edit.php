@@ -26,12 +26,12 @@ if (isset($_GET['id'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
-    $updatedNom = $_POST['edit-nom'];
-    $updatedCNE = $_POST['edit-CNE'];
-    $updatedVille = $_POST['edit-ville'];
+    $nom = $_POST['edit-nom'];
+    $cne = $_POST['edit-CNE'];
+    $nom_ville= $_POST['edit-ville'];
 
     try {
-        $id_ville = $personneDAO->getVilleIdByName($ville);
+        $ville = $personneDAO->getVilleIdByName($nom_ville);
         $personneDAO->updateStagiaire($id, $nom, $cne, $ville);
         header("Location: index.php");
         exit();
@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
 
 <!-- Page Header -->
 <header class="page-header text-center">
-    <h1>Edit Student</h1>
+    <h1>Edit Stagiaire</h1>
 </header>
 
 <!-- Edit Form -->

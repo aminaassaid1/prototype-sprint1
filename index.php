@@ -30,7 +30,7 @@ if (isset($_POST["delete"])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="This is a simple implementation of OOP in PHP. This application is created for educational purposes." />
     <meta name="author" content="Arif Uddin" />
-    <link href="/Assets/Styles/Styles.css" rel="stylesheet">
+    <link href="./Assets/Styles/Styles.css" rel="stylesheet">
 
     <!-- Bootstrap 5.3.2 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">

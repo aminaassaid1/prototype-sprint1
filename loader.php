@@ -6,7 +6,5 @@ require_once Root . '../Application/DatabaseConnection.php';
 require_once Root . '../Application/DAL/StudentDAO.php';
 require_once Root . '../Application/BLL/StudentBLO.php';
 require_once Root . '../Application/Entities/Student.php';
-require_once Root . '../Assets/Styles/Styles.css';
-
 
 ?>
